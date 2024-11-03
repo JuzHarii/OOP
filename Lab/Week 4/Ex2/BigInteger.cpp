@@ -11,7 +11,7 @@ ostream& operator<<(ostream& os, const BigInteger& bi){
     return os;
 }
 // ! consttructors
-BigInteger::BigInteger() : list(){}
+BigInteger::BigInteger() : list(0){}
 
 BigInteger::BigInteger(long long n){
     while(n){

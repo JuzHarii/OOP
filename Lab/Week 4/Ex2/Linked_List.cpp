@@ -16,6 +16,10 @@ public:
         pHead = nullptr;
         pTail = nullptr;
     }
+    LinkedList(int x){
+        curN = 1;
+        pHead = pTail = createNode(x);
+    }
     ~LinkedList(){
         while(pHead){
             Node* temp = pHead;
@@ -29,51 +33,55 @@ public:
         temp->next = nullptr;
         return temp;
     }
-    void addHead(const int& n){
+    void addHead(const int& n) {
         Node* temp = createNode(n);
-        if(!pHead){
+        if (!pHead) {
             pHead = pTail = temp;
-        }else{
+        } else {
             temp->next = pHead;
             pHead = temp;
         }
+        curN++; // Increase the count
     }
-    void addTail(const int& n){
+
+    void addTail(const int& n) {
         Node* temp = createNode(n);
-        if(!pHead){
+        if (!pHead) {
             pHead = pTail = temp;
-        }else{
+        } else {
             pTail->next = temp;
             pTail = temp;
         }
+        curN++; // Increase the count
     }
+
     Node* removeHead() {
-        if (!pHead) {
-            return nullptr;
-        } else {
-            Node* temp = pHead;
-            pHead = pHead->next;
-            delete temp;
-            return pHead;
-        }
-    }
-    Node* removeTail(){
+        if (!pHead) return nullptr;
         Node* temp = pHead;
-        if(!pHead){
-            return nullptr;
-        }else if(pHead == pTail){
+        pHead = pHead->next;
+        delete temp;
+        curN--; // Decrease the count
+        if (!pHead) pTail = nullptr;
+        return pHead;
+    }
+
+    Node* removeTail() {
+        if (!pHead) return nullptr;
+        Node* temp = pHead;
+        if (pHead == pTail) {
             delete pHead;
             pHead = pTail = nullptr;
+            curN = 0;
             return nullptr;
-        }else{
-            while(temp->next != pTail){
-                temp = temp->next;
-            }
-            delete pTail;
-            pTail = temp;
-            pTail->next = nullptr;
-            return pTail;
         }
+        while (temp->next != pTail) {
+            temp = temp->next;
+        }
+        delete pTail;
+        pTail = temp;
+        pTail->next = nullptr;
+        curN--; // Decrease the count
+        return pTail;
     }
     Node* getHead(){
         return pHead;
