@@ -1,20 +1,24 @@
-#include <iostream>
-
-using namespace std;
-
-struct Node{
-    int data;
-    Node* next;
-    Node* prev;
-};
+#include "Linked_List.cpp"
 
 class BigInteger{
 private:
-    Node* pHead;
-    Node* pTail;
+    LinkedList list;
 public:
-    // Contrustors
+    // ! constructors
     BigInteger();
-    BigInteger(long long num);
+    BigInteger(long long n);
     BigInteger(int x, int n);
+
+    // ! operators
+    BigInteger operator+(const BigInteger& bi);
+    BigInteger operator-(const BigInteger& bi);
+    BigInteger operator*(const BigInteger& bi);
+
+    // ! friend function
+    friend BigInteger operator+(long long n, const BigInteger& bi);
+    friend BigInteger operator-(long long n, const BigInteger& bi);
+    friend BigInteger operator*(long long n, const BigInteger& bi);
+
+    // ! friend ostream
+    friend ostream& operator<<(ostream& os, const BigInteger& bi);
 };
