@@ -78,4 +78,7 @@ public:
     Node* getHead(){
         return pHead;
     }
+    Node* getTail(){
+        return pTail;
+    }
 };
