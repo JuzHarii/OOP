@@ -10,5 +10,11 @@ struct Node{
 
 class BigInteger{
 private:
-    
+    Node* pHead;
+    Node* pTail;
+public:
+    // Contrustors
+    BigInteger();
+    BigInteger(long long num);
+    BigInteger(int x, int n);
 };
