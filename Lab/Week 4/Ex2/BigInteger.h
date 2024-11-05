@@ -13,7 +13,7 @@ public:
     BigInteger operator+(const BigInteger& bi);
     BigInteger operator-(const BigInteger& bi);
     BigInteger operator*(const BigInteger& bi);
-
+    bool operator<=(const BigInteger& bi);
     // ! friend function
     friend BigInteger operator+(long long n, const BigInteger& bi);
     friend BigInteger operator-(long long n, const BigInteger& bi);

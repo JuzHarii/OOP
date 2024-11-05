@@ -32,11 +32,10 @@ BigInteger::BigInteger(int x, int n){
 
 // ! addition operator
 BigInteger BigInteger::operator+(const BigInteger& bi) {
-    LinkedList list_temp = bi.list;
     LinkedList list_res;
 
     Node* ptemp1 = list.getTail();
-    Node* ptemp2 = list_temp.getTail();
+    Node* ptemp2 = bi.list.getTail();
 
     int carry = 0;
     while (ptemp1 || ptemp2 || carry) {
@@ -54,8 +53,41 @@ BigInteger BigInteger::operator+(const BigInteger& bi) {
     return result;
 }
 
+bool BigInteger::operator<=(const BigInteger& bi) {
+    LinkedList list_temp = bi.list;
+
+    // Compare lengths first
+    if (list.getN() < list_temp.getN())
+        return true;
+    if (list.getN() > list_temp.getN())
+        return false;
+
+    // If lengths are equal, compare digit by digit
+    Node* ptemp1 = list.getHead();
+    Node* ptemp2 = list_temp.getHead();
+
+    while (ptemp1 && ptemp2) {
+        if (ptemp1->data < ptemp2->data)
+            return true;
+        if (ptemp1->data > ptemp2->data)
+            return false;
+        ptemp1 = ptemp1->next;
+        ptemp2 = ptemp2->next;
+    }
+    return true;
+}
+
+
 // ! subtraction operator
 BigInteger BigInteger::operator-(const BigInteger& bi) {
+    BigInteger res;
+
+    if(*this <= bi){
+        LinkedList list_res(0);
+        res.list = list_res;
+        return res;
+    }
+
     LinkedList list_temp = bi.list;
     LinkedList list_res;
 
@@ -69,7 +101,6 @@ BigInteger BigInteger::operator-(const BigInteger& bi) {
 
         int sub = digit1 - digit2 - carry;
 
-        // If the result is negative, borrow from the next place
         if (sub < 0) {
             sub += 10;
             carry = 1;
@@ -79,12 +110,10 @@ BigInteger BigInteger::operator-(const BigInteger& bi) {
 
         list_res.addHead(sub);
 
-        // Move to the previous nodes in each list
         if (ptemp1) ptemp1 = ptemp1->prev;
         if (ptemp2) ptemp2 = ptemp2->prev;
     }
 
-    // Remove any leading zeros from the result list
     while (list_res.getHead() && list_res.getHead()->data == 0 && list_res.getHead() != list_res.getTail()) {
         list_res.removeHead();
     }
@@ -105,3 +134,5 @@ BigInteger operator-(long long n, const BigInteger& bi){
     BigInteger temp(n);
     return temp - bi;
 }
+
+

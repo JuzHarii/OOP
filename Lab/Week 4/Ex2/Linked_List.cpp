@@ -93,11 +93,15 @@ public:
         return pTail;
     }
 
-    Node* getHead() {
+    Node* getHead() const {
         return pHead;
     }
 
-    Node* getTail() {
+    Node* getTail() const {
         return pTail;
+    }
+
+    int getN() const {
+        return curN;
     }
 };
