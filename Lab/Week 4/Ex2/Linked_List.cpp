@@ -1,11 +1,10 @@
 #include <iostream>
-
 using namespace std;
 
 struct Node {
     int data;
     Node* next;
-    Node* prev;  // Added prev pointer for doubly linked list
+    Node* prev;  // doubly linked list
 };
 
 class LinkedList {
@@ -15,30 +14,56 @@ private:
     int curN;
 
 public:
-    LinkedList() {
-        pHead = nullptr;
-        pTail = nullptr;
-        curN = 0;
-    }
+    LinkedList() : pHead(nullptr), pTail(nullptr), curN(0) {}
 
-    LinkedList(int x) {
-        curN = 1;
+    LinkedList(int x) : curN(1) {
         pHead = pTail = createNode(x);
     }
 
-    ~LinkedList() {
-        while (pHead) {
-            Node* temp = pHead;
-            pHead = pHead->next;
-            delete temp;
+    // Copy constructor
+    LinkedList(const LinkedList& other) : pHead(nullptr), pTail(nullptr), curN(0) {
+        Node* current = other.pHead;
+        while (current) {
+            addTail(current->data);
+            current = current->next;
         }
     }
 
+    // Assignment operator
+    LinkedList& operator=(const LinkedList& other) {
+        if (this != &other) {
+            // Clean up existing list
+            while (pHead) {
+                removeHead();
+            }
+
+            // Copy from other list
+            Node* current = other.pHead;
+            while (current) {
+                addTail(current->data);
+                current = current->next;
+            }
+        }
+        return *this;
+    }
+
+    // Destructor
+    ~LinkedList() {
+        while (pHead) {
+            removeHead();
+        }
+    }
+
+    // Create a new node with error handling
     static Node* createNode(const int& val) {
-        Node* temp = new Node;
+        Node* temp = new (nothrow) Node;
+        if (!temp) {
+            cerr << "Memory allocation failed for node creation.\n";
+            exit(1); // Exit if memory allocation fails
+        }
         temp->data = val;
         temp->next = nullptr;
-        temp->prev = nullptr;  // Initialize prev to nullptr
+        temp->prev = nullptr;
         return temp;
     }
 
@@ -51,7 +76,7 @@ public:
             pHead->prev = temp;
             pHead = temp;
         }
-        curN++;  // Increase the count
+        curN++;
     }
 
     void addTail(const int& n) {
@@ -63,34 +88,32 @@ public:
             temp->prev = pTail;
             pTail = temp;
         }
-        curN++;  // Increase the count
+        curN++;
     }
 
-    Node* removeHead() {
-        if (!pHead) return nullptr;
+    void removeHead() {
+        if (!pHead) return;
         Node* temp = pHead;
         pHead = pHead->next;
         if (pHead) pHead->prev = nullptr;
         else pTail = nullptr;
         delete temp;
-        curN--;  // Decrease the count
-        return pHead;
+        curN--;
     }
 
-    Node* removeTail() {
-        if (!pHead) return nullptr;
+    void removeTail() {
+        if (!pHead) return;
         Node* temp = pTail;
         if (pHead == pTail) {
             delete pHead;
             pHead = pTail = nullptr;
             curN = 0;
-            return nullptr;
+            return;
         }
         pTail = pTail->prev;
         pTail->next = nullptr;
         delete temp;
         curN--;
-        return pTail;
     }
 
     Node* getHead() const {

@@ -81,13 +81,12 @@ bool BigInteger::operator<=(const BigInteger& bi) {
 // ! subtraction operator
 BigInteger BigInteger::operator-(const BigInteger& bi) {
     BigInteger res;
-
     if(*this <= bi){
         LinkedList list_res(0);
         res.list = list_res;
         return res;
     }
-
+    
     LinkedList list_temp = bi.list;
     LinkedList list_res;
 
@@ -136,3 +135,42 @@ BigInteger operator-(long long n, const BigInteger& bi){
 }
 
 
+// Multiplication operator
+BigInteger BigInteger::operator*(const BigInteger& bi){
+    BigInteger result;
+    Node* p1 = list.getTail();
+    int position = 0;
+
+    while (p1) {
+        LinkedList tempList;
+        int carry = 0;
+
+        // Add zeros for current position
+        for (int i = 0; i < position; i++) {
+            tempList.addHead(0);
+        }
+
+        Node* p2 = bi.list.getTail();
+        while (p2 || carry) {
+            int prod = (p1 ? p1->data : 0) * (p2 ? p2->data : 0) + carry;
+            tempList.addHead(prod % 10);
+            carry = prod / 10;
+
+            if (p2) p2 = p2->prev;
+        }
+
+        BigInteger tempResult;
+        tempResult.list = tempList;
+        result = result + tempResult;
+        p1 = p1->prev;
+        position++;
+    }
+
+    return result;
+}
+
+// Multiplication with long long
+BigInteger operator*(long long n, const BigInteger& bi){
+    BigInteger temp(n);
+    return temp * bi;
+}
