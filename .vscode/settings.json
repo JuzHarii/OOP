@@ -6,6 +6,8 @@
         "*.tcc": "cpp",
         "memory_resource": "cpp",
         "type_traits": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "new": "cpp"
     }
 }
