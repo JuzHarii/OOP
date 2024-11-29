@@ -1,16 +1,31 @@
+#include <string>
 #include <iostream>
 
 using namespace std;
 
-class NGUOI{
-private:
+class NGUOI {
+protected:
     string hoTen;
     string ngaySinh;
     string diaChi;
+
 public:
     NGUOI();
     NGUOI(string hoTen, string ngaySinh, string diaChi);
-    void input();
-    void display();
-    ~NGUOI();
+
+    virtual void input();
+    virtual void display() const;
+};
+
+class NV : public NGUOI {
+private:
+    string department;
+    double salaryIndex;
+    double allowance;
+
+public:
+    NV();
+    
+    void input() override;
+    void display() const override;
 };
